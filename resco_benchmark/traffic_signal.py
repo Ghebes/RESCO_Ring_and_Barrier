@@ -104,7 +104,10 @@ class Signal:
 
         self.green_phases: dict[int, str] = dict()
         idx = 0
-        for p in self.sumo.trafficlight.getAllProgramLogics(signal_id)[0].getPhases():
+        logics = self.sumo.trafficlight.getAllProgramLogics(signal_id)
+        # With ACTUATED a NEMA program is loaded too; phases come from the network's own.
+        logic = next((lg for lg in logics if lg.programID != "NEMA-actuated"), logics[0])
+        for p in logic.getPhases():
             if "y" not in p.state and p.state.count("r") + p.state.count("s") != len(
                 p.state
             ):

@@ -93,6 +93,12 @@ class MultiSignal(gym.Env):
 
         self.date = self.resolve_date()
 
+        # ACTUATED: SUMO's NEMA controllers run the signals; RESCO only observes.
+        self.actuated = cfg.algorithm == "ACTUATED"
+        self.nema_file = None
+        if self.actuated:
+            self.nema_file = self.write_nema_controllers()
+
         self.sumo_start()
         self.signal_ids = self.sumo.trafficlight.getIDList()
         logger.info("lights {0} {1}".format(len(self.signal_ids), self.signal_ids))
@@ -105,6 +111,7 @@ class MultiSignal(gym.Env):
             self.signals[signal_id].signals = (
                 self.signals
             )  # Facilitates signal communication
+            self.hand_over_to_nema(self.signals[signal_id])
             self.signals[signal_id].observe()
         observations = self.state_fn(self.signals)
 
@@ -319,6 +326,8 @@ class MultiSignal(gym.Env):
                 "True",
                 "--eager-insert",  # Undeparted not written correctly without this, slows down simulation though
             ]
+            if self.nema_file is not None:
+                self.sumo_cmd += ["--additional-files", self.nema_file]
 
             if cfg.seed is None:
                 self.sumo_cmd += ["--random", "True"]
@@ -424,12 +433,53 @@ class MultiSignal(gym.Env):
         for ts in self.signal_ids:
             self.signals[ts] = Signal(self.sumo, ts)
             self.signals[ts].signals = self.signals
+            self.hand_over_to_nema(self.signals[ts])
             self.signals[ts].observe()
 
         if self.action_mask is not None and hasattr(self.action_mask, "reset"):
             self.action_mask.reset()
 
         return self.state_fn(self.signals), info
+
+    def hand_over_to_nema(self, signal):
+        """ACTUATED: stop RESCO's Signal from ever setting a light state.
+
+        Signal starts with a pending switch (next_phase == current_phase) that
+        would push a fixed state 3 s in, and any pushed state replaces the NEMA
+        program for the rest of the episode.
+        """
+        if self.actuated:
+            signal.next_phase = None
+
+    def assert_nema_running(self):
+        for signal_id in self.signal_ids:
+            program = self.sumo.trafficlight.getProgram(signal_id)
+            if program != "NEMA-actuated":
+                raise RuntimeError(
+                    f"ACTUATED: signal {signal_id} is running program {program!r}, "
+                    "not the NEMA controller"
+                )
+
+    def write_nema_controllers(self):
+        """Generate NEMA actuated controllers for every signal into the run folder."""
+        from resco_benchmark.utils import nema
+
+        params = {
+            key: cfg[f"nema_{key}"] for key in nema.DEFAULT_PARAMS if f"nema_{key}" in cfg
+        }
+        signal_ids = [
+            s for s in nema.parse_net(cfg.network) if s in cfg and "lane_sets" in cfg[s]
+        ]
+        signal_cfg = {s: {"lane_sets": dict(cfg[s]["lane_sets"])} for s in signal_ids}
+        controllers = nema.build_controllers(cfg.network, signal_cfg, signal_ids, params)
+        # Not inside run_path: episode-log cleanup deletes every .xml there.
+        path = os.path.join(cfg.run_path, "..", "nema_actuated_" + cfg.uuid + ".add.xml")
+        path = os.path.normpath(path)
+        nema.write_additional(path, controllers)
+        logger.info(
+            "ACTUATED: NEMA controllers for %d signals written to %s", len(controllers), path
+        )
+        return path
 
     def episode_route_file(self, episode_index):
         """Route file for 0-based episode_index, cycling through the folder."""
@@ -500,8 +550,11 @@ class MultiSignal(gym.Env):
         act = self.uncontrolled_acts(act)
 
         cutoff = traci.simulation.getTime()
-        for signal in self.signals:
-            self.signals[signal].switch_phase(act[signal])
+        if self.actuated:
+            self.assert_nema_running()
+        else:
+            for signal in self.signals:
+                self.signals[signal].switch_phase(act[signal])
         for __ in range(cfg.step_length):
             self.sumo.simulationStep()
             for signal in self.signal_ids:

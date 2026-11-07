@@ -132,11 +132,12 @@ def run_trial():
     if cfg.save_model:
         agent.save()
     env.close()
+    # Parse before cleanup: cleanup_log_dir deletes every tripinfo/metrics file,
+    # which used to drop the final episode from the results.
+    results = parse_logs()
     if cfg.delete_episode_logs:
         cleanup_log_dir()
-    return (
-        parse_logs()
-    )  # TODO scan json file for full results and return them for optuna objective evaluation
+    return results  # TODO scan json file for full results and return them for optuna objective evaluation
 
 
 if __name__ == "__main__":

@@ -7,6 +7,23 @@ FIXED:
   reward: wait  # Rewards are irrelevant for static agents
   action_set: Phase
 
+ACTUATED:   # SUMO NEMA actuated ring-and-barrier, generated per signal (utils/nema.py)
+  module: static.actuated
+  state: wave
+  reward: wait  # Rewards are irrelevant for static agents
+  action_set: Phase
+  training: False
+  # Tuned Cologne1 values (cologne1_nema_100_episodes.json), used on every map
+  nema_detector_length: 40
+  nema_detector_length_left: 20
+  nema_left_min_green: 3
+  nema_left_max_green: 12
+  nema_through_min_green: 5
+  nema_through_max_green: 80
+  nema_vehicle_extension: 1
+  nema_yellow: 3
+  nema_red: 2
+
 STOCHASTIC:
   module: static.stochastic
   state: mplight
