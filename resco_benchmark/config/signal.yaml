@@ -1157,7 +1157,11 @@
     'top_right_mgr': [ 'top_mgr', 'top_left_mgr' ]
   }}
 'cologne1': {
-  'phase_pairs': [ ['W-W', 'W-S'], ['E-E', 'E-N'], ['W-W', 'E-E'], ['W-S', 'E-N'], ['N-N', 'N-W'], ['S-S', 'S-E'], ['S-S', 'N-N'], ['S-E', 'N-W'] ],
+  # Phases 0 and 1 were listed as [W-W, W-S], [E-E, E-N] in upstream RESCO, but the
+  # network's phase 0 greens lanes 28198821#3_* (lane_sets: E-E/E-N) and phase 1 greens
+  # -32038056#3_* (W-W/W-S). Corrected so phase_pairs agrees with lane_sets; see
+  # show_phase_check.py.
+  'phase_pairs': [ ['E-E', 'E-N'], ['W-W', 'W-S'], ['W-W', 'E-E'], ['W-S', 'E-N'], ['N-N', 'N-W'], ['S-S', 'S-E'], ['S-S', 'N-N'], ['S-E', 'N-W'] ],
   'pair_to_act_map': null,
   'cluster_357187_359543': {
     'lane_sets': {

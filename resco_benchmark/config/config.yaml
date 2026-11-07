@@ -8,7 +8,7 @@
             controlled_signals: null   # List of signals to control, null for all
             uncontrolled_policy: FIXED  # Policy for non-controlled signals, one of [FIXED, MAXPRESSURE, MAXWAVE]
 
-            action_set: RingAndBarrier   # Cologne1 FHWA-style ring-and-barrier actions
+            action_set: RingAndBarrier   # FHWA dual-ring, two-barrier actions; phase map derived per signal from phase_pairs
             episodes: 1400
             converged: null   # Number of episodes to wait for convergence, null to disable, at least 'episodes' to run
             log_dir: new_results
@@ -31,9 +31,10 @@
             step_length: 5
             yellow_length: 3
             clearance_length: 2 # all red after permissive left turn phases, use if SUMO gridlocks in high demand
-            ring_max_green: 120 # seconds; RingAndBarrier protected/split phases, null disables
-            ring_through_min_green: null # seconds; guarantees mainline capacity before crossing the barrier
-            ring_through_max_green: 120 # seconds; coordinated-through phase, null disables
+            ring_max_green: 120 # seconds; RingAndBarrier left/split phases, null disables
+            ring_through_min_green: null # seconds; min time in a barrier's last (through) phase before crossing
+            ring_through_max_green: 120 # seconds; barrier's last (through) phase, null disables
+            ring_state_obs: False # append barrier, ring positions and time in phase to the observation (flat_state only)
             step_ratio: 1   # Number of SUMO steps per step (used for sub 1s microsim update scenarios, not used atm)
 
             run_hour: null  # One of [peak, null]  only applies to saltlake, null will run from start_date until episode limit

@@ -1,64 +1,47 @@
+import logging
+
 import numpy as np
 
 from resco_benchmark.config.config import config as cfg
+import resco_benchmark.mdp_options.ring_barrier as rb
 from resco_benchmark.agents.static.fixed import FIXED, FixedAgent
+
+logger = logging.getLogger(__name__)
 
 
 # Config values of phase or null will use direct 'set next phase' actions
 
 
 class RingAndBarrier:
-    """Stateful dual-ring, two-barrier controller for Cologne1.
+    """Dual-ring, two-barrier action set for any RESCO map.
 
-    Each ring independently occupies the left-turn (0) or through (1) phase in
-    its current barrier group.  A ring may advance from left-turn to through on
-    its own, but it must wait at through until both rings can cross the barrier
-    together.
+    Actions (identical on every signal): 0 hold, 1 advance ring 1, 2 advance
+    ring 2, 3 advance both / cross the barrier.  Each signal's state -> phase
+    map is derived from the map's ``phase_pairs`` and ``pair_to_act_map``; see
+    ``resco_benchmark.mdp_options.ring_barrier`` for the ring layout and the
+    rules for omitted phases and missing split combinations.
 
     FHWA Traffic Signal Timing Manual, section 4.2.2:
     https://ops.fhwa.dot.gov/publications/fhwahop08024/chapter4.htm
     """
 
-    SIGNAL_ID = "cluster_357187_359543"
-    EXPECTED_PHASE_COUNT = 8
+    HOLD_BOTH = rb.HOLD_BOTH
+    ADVANCE_RING_1 = rb.ADVANCE_RING_1
+    ADVANCE_RING_2 = rb.ADVANCE_RING_2
+    ADVANCE_BOTH = rb.ADVANCE_BOTH
 
-    HOLD_BOTH = 0
-    ADVANCE_RING_1 = 1
-    ADVANCE_RING_2 = 2
-    ADVANCE_BOTH = 3
-
-    # (barrier, ring-1 position, ring-2 position) -> Cologne1 SUMO phase.
-    # Position 0 is the protected-left phase and position 1 is the through phase.
-    # The four combinations on each side of the barrier account for all eight
-    # green phases in Cologne1's existing SUMO program.
-    PHASE_MAP = {
-        (0, 0, 0): 3,  # east-west: both protected lefts
-        (0, 1, 0): 0,  # east-west: ring 1 through, ring 2 left
-        (0, 0, 1): 1,  # east-west: ring 1 left, ring 2 through
-        (0, 1, 1): 2,  # east-west: both through
-        (1, 0, 0): 7,  # north-south: both protected lefts
-        (1, 1, 0): 4,  # north-south: ring 1 through, ring 2 left
-        (1, 0, 1): 5,  # north-south: ring 1 left, ring 2 through
-        (1, 1, 1): 6,  # north-south: both through
-    }
+    # Agents whose actions are phase_pairs indices cannot drive 4 R&B actions.
+    INCOMPATIBLE_ALGORITHMS = {"MPLight", "AdvancedMPLight", "CoSLight"}
 
     def __init__(self, obs_act, signals):
-        if cfg.map != "cologne1":
-            raise ValueError("RingAndBarrier is defined only for cologne1")
-        if set(signals) != {self.SIGNAL_ID}:
+        if cfg.algorithm in self.INCOMPATIBLE_ALGORITHMS:
             raise ValueError(
-                "The Cologne1 ring-and-barrier action set requires signal "
-                f"{self.SIGNAL_ID!r}; received {sorted(signals)}"
+                f"RingAndBarrier is not supported with {cfg.algorithm}: its actions "
+                "are phase_pairs indices. Use an independent agent such as IDQN "
+                "or IPPO."
             )
-        phase_count = obs_act[self.SIGNAL_ID][1]
-        if phase_count != self.EXPECTED_PHASE_COUNT:
-            raise ValueError(
-                f"{self.SIGNAL_ID} must expose {self.EXPECTED_PHASE_COUNT} green "
-                f"phases; received {phase_count}"
-            )
-
         self.signals = signals
-        self.num_acts = 4
+        self.num_acts = rb.NUM_ACTS
         self.max_green = cfg.ring_max_green
         self.through_min_green = cfg.ring_through_min_green
         self.through_max_green = cfg.ring_through_max_green
@@ -69,57 +52,45 @@ class RingAndBarrier:
         ):
             if value is not None and value <= 0:
                 raise ValueError(f"{name} must be positive or null")
+
+        pair_to_act_map = cfg.get("pair_to_act_map")
+        self.controllers = dict()
+        for signal_id in signals:
+            pair_to_act = None
+            if pair_to_act_map is not None:
+                pair_to_act = pair_to_act_map.get(signal_id)
+                if pair_to_act is None:
+                    raise ValueError(
+                        f"pair_to_act_map has no entry for signal {signal_id!r}"
+                    )
+            phase_map = rb.build_phase_map(
+                cfg.phase_pairs,
+                pair_to_act,
+                num_green=obs_act[signal_id][1],
+                signal_id=signal_id,
+            )
+            self.controllers[signal_id] = rb.RingBarrierSignal(
+                phase_map,
+                max_green=self.max_green,
+                through_min_green=self.through_min_green,
+                through_max_green=self.through_max_green,
+                signal_id=signal_id,
+            )
+            logger.info(
+                "RingAndBarrier %s: %s",
+                signal_id,
+                {"".join(map(str, k)): v for k, v in sorted(phase_map.items())},
+            )
         self.reset()
 
     def reset(self):
-        """Start each episode with both rings at barrier 1 protected lefts."""
-        self.barriers = {signal_id: 0 for signal_id in self.signals}
-        self.ring_positions = {
-            signal_id: [0, 0] for signal_id in self.signals
-        }
-        self.phase_elapsed = {signal_id: 0 for signal_id in self.signals}
-        self.last_phases = {
-            signal_id: self.PHASE_MAP[(0, 0, 0)] for signal_id in self.signals
-        }
+        """Start each episode at barrier 0's entry state."""
+        for controller in self.controllers.values():
+            controller.reset()
 
-    def _safe_action(self, signal_id, action):
-        """Prevent a learned policy from starving a ring indefinitely."""
-        positions = self.ring_positions[signal_id]
-        if (
-            positions == [1, 1]
-            and self.through_min_green is not None
-            and self.phase_elapsed[signal_id] < self.through_min_green
-        ):
-            return self.HOLD_BOTH
-        max_green = (
-            self.through_max_green if positions == [1, 1] else self.max_green
-        )
-        if (
-            max_green is None
-            or self.phase_elapsed[signal_id] < max_green
-        ):
-            return action
-
-        if positions == [0, 0] or positions == [1, 1]:
-            return self.ADVANCE_BOTH
-        if positions == [0, 1]:
-            return self.ADVANCE_RING_1
-        return self.ADVANCE_RING_2
-
-    def _advance(self, signal_id, action):
-        positions = self.ring_positions[signal_id]
-        both_waiting = positions == [1, 1]
-
-        if action in (self.ADVANCE_RING_1, self.ADVANCE_BOTH):
-            positions[0] = min(1, positions[0] + 1)
-        if action in (self.ADVANCE_RING_2, self.ADVANCE_BOTH):
-            positions[1] = min(1, positions[1] + 1)
-
-        # A barrier may only be crossed by an explicit ADVANCE_BOTH when both
-        # rings were already waiting at their through phases before this action.
-        if action == self.ADVANCE_BOTH and both_waiting:
-            self.barriers[signal_id] = 1 - self.barriers[signal_id]
-            positions[:] = [0, 0]
+    def features(self, signal_id):
+        scale = self.through_max_green or self.max_green or 120.0
+        return self.controllers[signal_id].features(elapsed_scale=scale)
 
     def act(self, acts):
         mapped_acts = dict(acts)
@@ -134,21 +105,9 @@ class RingAndBarrier:
                     f"RingAndBarrier action for {signal_id} must be between 0 "
                     f"and {self.num_acts - 1}; received {action}"
                 )
-            action = int(action)
-            action = self._safe_action(signal_id, action)
-            self._advance(signal_id, action)
-
-            state = (
-                self.barriers[signal_id],
-                *self.ring_positions[signal_id],
+            mapped_acts[signal_id] = self.controllers[signal_id].step(
+                int(action), cfg.step_length
             )
-            mapped_phase = self.PHASE_MAP[state]
-            if mapped_phase == self.last_phases[signal_id]:
-                self.phase_elapsed[signal_id] += cfg.step_length
-            else:
-                self.last_phases[signal_id] = mapped_phase
-                self.phase_elapsed[signal_id] = 0
-            mapped_acts[signal_id] = mapped_phase
         return mapped_acts
 
 

@@ -5,6 +5,7 @@ import pickle
 import uuid
 
 import gymnasium as gym
+import numpy as np
 
 from resco_benchmark.agents.static.fixed import FIXED
 from resco_benchmark.agents.static.maxpressure import MAXPRESSURE
@@ -53,6 +54,21 @@ class MultiSignal(gym.Env):
         self.episode_vehicles = 0
         self.metrics = list()
         self.original_route = cfg.route
+        # grid4x4 / arterial4x4 ship one route file per episode in a folder
+        # (extracted from <map>.zip): <map>/<map>_<n>.rou.xml, n = 1..N.
+        self.route_dir = None
+        if cfg.route is not None and os.path.isdir(cfg.route):
+            if cfg.flow != 1.0 or cfg.curriculum is not None:
+                raise NotImplementedError(
+                    "flow scaling/curriculum is not supported for per-episode route folders"
+                )
+            self.route_dir = cfg.route
+            self.route_count = len(
+                [f for f in os.listdir(self.route_dir) if f.endswith(".rou.xml")]
+            )
+            if self.route_count == 0:
+                raise FileNotFoundError(f"No .rou.xml files in {self.route_dir}")
+            cfg.route = self.episode_route_file(0)
         self.sumo_cmd = None
         self.sumo = None  # Set by start_sumo
         self.best_reward = None
@@ -115,6 +131,30 @@ class MultiSignal(gym.Env):
             if cfg.algorithm != "FIXED":
                 for ts in self.obs_act:
                     self.obs_act[ts] = (self.obs_act[ts][0], self.action_mask.num_acts)
+
+        # Optionally append ring-and-barrier state (barrier, ring positions,
+        # scaled time in phase) to each controlled signal's observation.
+        if cfg.get("ring_state_obs") and hasattr(self.action_mask, "features"):
+            if not cfg.flat_state:
+                raise ValueError("ring_state_obs requires flat_state: True")
+            base_state_fn = self.state_fn
+            action_mask = self.action_mask
+
+            def ring_state_wrapper(signals):
+                obs = base_state_fn(signals)
+                for signal_id in action_mask.controllers:
+                    obs[signal_id] = np.concatenate(
+                        [obs[signal_id], action_mask.features(signal_id)]
+                    )
+                return obs
+
+            self.state_fn = ring_state_wrapper
+            observations = self.state_fn(self.signals)
+            for signal_id in observations:
+                self.obs_act[signal_id] = (
+                    observations[signal_id].shape,
+                    self.obs_act[signal_id][1],
+                )
 
         # Calculate decay period from % input for convenience
         steps_per_episode = int((cfg.end_time - cfg.start_time) / cfg.step_length)
@@ -291,7 +331,11 @@ class MultiSignal(gym.Env):
                     str(cfg.end_time),
                 ]
 
-        sumo_cmd = self.sumo_cmd + [
+        sumo_cmd = list(self.sumo_cmd)
+        # The cached command keeps the first route file; refresh it so maps
+        # with one route file per episode load the current episode's file.
+        sumo_cmd[sumo_cmd.index("--route-files") + 1] = cfg.route
+        sumo_cmd += [
             "--tripinfo-output",
             cfg.run_path + "tripinfo_{0}.xml".format(self.cumulative_episode),
         ]
@@ -365,6 +409,8 @@ class MultiSignal(gym.Env):
                         pass
             else:
                 self.get_saltlake_data()
+        elif self.route_dir is not None:
+            cfg.route = self.episode_route_file(self.cumulative_episode)
         elif (
             cfg.flow != 0 or cfg.curriculum is not None
         ):  # If the flow is altered, generate new flow files
@@ -384,6 +430,14 @@ class MultiSignal(gym.Env):
             self.action_mask.reset()
 
         return self.state_fn(self.signals), info
+
+    def episode_route_file(self, episode_index):
+        """Route file for 0-based episode_index, cycling through the folder."""
+        n = episode_index % self.route_count + 1
+        path = os.path.join(self.route_dir, f"{cfg.map}_{n}.rou.xml")
+        if not os.path.exists(path):
+            raise FileNotFoundError(path)
+        return path
 
     def get_saltlake_data(self):
         cfg.start_time = self.hour_of_day * 3600

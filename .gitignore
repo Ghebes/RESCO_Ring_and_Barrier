@@ -166,3 +166,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 /resco_benchmark/config/logs/
+
+# Per-episode route files extracted from grid4x4.zip / arterial4x4.zip
+resco_benchmark/environments/grid4x4/grid4x4/
+resco_benchmark/environments/arterial4x4/arterial4x4/

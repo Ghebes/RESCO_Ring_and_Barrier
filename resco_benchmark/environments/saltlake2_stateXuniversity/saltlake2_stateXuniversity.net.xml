@@ -217,7 +217,7 @@
 		<phase duration="5" state="srrsrrrsrrGGGGG"  note="Eastbound only" />
 
         <phase duration="5" state="srrGGGgsrrGGGGg" note="East/West all green" />
-        <phase duration="5"  state="srrrrrGsrrrrrrG" note="East/West protected lefts" />
+        <phase duration="5"  state="srrrrrrsrrrrrrG" note="East/West protected lefts (link 6, westbound through lane B3A3_2, set to red: it conflicted with the eastbound left)" />
 
 		<phase duration="5" state="srrsrrrGGGsrrrr" note="Southbound only" />
         <phase duration="5" state="GGGsrrrsrrsrrrr" note="Northbound only" />
