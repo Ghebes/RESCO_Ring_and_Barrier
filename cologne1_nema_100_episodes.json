@@ -1,0 +1,945 @@
+{
+  "arrived": {
+    "mean": 1992.8,
+    "median": 1992.0,
+    "stdev": 2.796101181678127
+  },
+  "controller": "SUMO NEMA actuated",
+  "mean_duration": {
+    "mean": 49.651037220843676,
+    "median": 49.70124069478908,
+    "stdev": 1.0475023855879144
+  },
+  "mean_time_loss": {
+    "mean": 29.06009106699752,
+    "median": 29.217776674937966,
+    "stdev": 1.3310923870511988
+  },
+  "mean_waiting_time": {
+    "mean": 16.428292803970223,
+    "median": 16.55012406947891,
+    "stdev": 1.0243963459039245
+  },
+  "parameters": {
+    "detector_length": 40.0,
+    "detector_length_left": 20.0,
+    "left_max_green": 12.0,
+    "left_min_green": 3.0,
+    "through_max_green": 80.0,
+    "through_min_green": 5.0,
+    "vehicle_extension": 1.0
+  },
+  "run_count": 100,
+  "runs": [
+    {
+      "arrived": 1992,
+      "mean_duration": 51.33200992555831,
+      "mean_time_loss": 31.37087841191067,
+      "mean_waiting_time": 18.06302729528536,
+      "seed": 90210,
+      "total_time_loss": 63212.32000000006,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 49.80198511166253,
+      "mean_time_loss": 29.772129032258064,
+      "mean_waiting_time": 16.779652605459056,
+      "seed": 90211,
+      "total_time_loss": 59990.840000000135,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 50.10818858560794,
+      "mean_time_loss": 29.63466004962779,
+      "mean_waiting_time": 17.072952853598014,
+      "seed": 90212,
+      "total_time_loss": 59713.840000000106,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1994,
+      "mean_duration": 50.298263027295285,
+      "mean_time_loss": 29.950138957816378,
+      "mean_waiting_time": 16.78411910669975,
+      "seed": 90213,
+      "total_time_loss": 60349.52999999993,
+      "unfinished": 21
+    },
+    {
+      "arrived": 2001,
+      "mean_duration": 48.84863523573201,
+      "mean_time_loss": 28.193563275434244,
+      "mean_waiting_time": 15.296774193548387,
+      "seed": 90214,
+      "total_time_loss": 56810.03000000008,
+      "unfinished": 14
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 48.28883374689826,
+      "mean_time_loss": 27.098372208436725,
+      "mean_waiting_time": 15.0,
+      "seed": 90215,
+      "total_time_loss": 54603.22,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1997,
+      "mean_duration": 50.651612903225804,
+      "mean_time_loss": 30.40697270471464,
+      "mean_waiting_time": 17.72803970223325,
+      "seed": 90216,
+      "total_time_loss": 61270.04999999999,
+      "unfinished": 18
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 48.70074441687345,
+      "mean_time_loss": 28.20504218362283,
+      "mean_waiting_time": 15.509181141439205,
+      "seed": 90217,
+      "total_time_loss": 56833.16000000008,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 48.28287841191067,
+      "mean_time_loss": 27.44363275434243,
+      "mean_waiting_time": 14.73151364764268,
+      "seed": 90218,
+      "total_time_loss": 55298.91999999997,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1989,
+      "mean_duration": 50.220843672456574,
+      "mean_time_loss": 29.44028784119107,
+      "mean_waiting_time": 16.840694789081887,
+      "seed": 90219,
+      "total_time_loss": 59322.179999999964,
+      "unfinished": 26
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 48.2863523573201,
+      "mean_time_loss": 27.296119106699752,
+      "mean_waiting_time": 14.832258064516129,
+      "seed": 90220,
+      "total_time_loss": 55001.68000000002,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1995,
+      "mean_duration": 49.323573200992556,
+      "mean_time_loss": 28.994818858560794,
+      "mean_waiting_time": 15.82531017369727,
+      "seed": 90221,
+      "total_time_loss": 58424.55999999996,
+      "unfinished": 20
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 48.64863523573201,
+      "mean_time_loss": 27.68881389578164,
+      "mean_waiting_time": 15.609429280397022,
+      "seed": 90222,
+      "total_time_loss": 55792.96000000001,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 48.738461538461536,
+      "mean_time_loss": 27.522962779156327,
+      "mean_waiting_time": 15.496774193548386,
+      "seed": 90223,
+      "total_time_loss": 55458.77000000004,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 48.2014888337469,
+      "mean_time_loss": 27.44914640198511,
+      "mean_waiting_time": 15.188089330024814,
+      "seed": 90224,
+      "total_time_loss": 55310.029999999955,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1998,
+      "mean_duration": 49.085359801488835,
+      "mean_time_loss": 28.42048635235732,
+      "mean_waiting_time": 15.565260545905707,
+      "seed": 90225,
+      "total_time_loss": 57267.279999999955,
+      "unfinished": 17
+    },
+    {
+      "arrived": 1996,
+      "mean_duration": 50.17071960297767,
+      "mean_time_loss": 29.275245657568238,
+      "mean_waiting_time": 16.635732009925558,
+      "seed": 90226,
+      "total_time_loss": 58989.62000000006,
+      "unfinished": 19
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 49.50322580645161,
+      "mean_time_loss": 28.31165260545906,
+      "mean_waiting_time": 15.864516129032259,
+      "seed": 90227,
+      "total_time_loss": 57047.97999999999,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1997,
+      "mean_duration": 49.05062034739454,
+      "mean_time_loss": 28.200853598014888,
+      "mean_waiting_time": 15.55136476426799,
+      "seed": 90228,
+      "total_time_loss": 56824.71999999988,
+      "unfinished": 18
+    },
+    {
+      "arrived": 1996,
+      "mean_duration": 49.66799007444169,
+      "mean_time_loss": 29.717215880893303,
+      "mean_waiting_time": 16.624317617866005,
+      "seed": 90229,
+      "total_time_loss": 59880.189999999966,
+      "unfinished": 19
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 48.84863523573201,
+      "mean_time_loss": 28.48254094292804,
+      "mean_waiting_time": 15.404962779156328,
+      "seed": 90230,
+      "total_time_loss": 57392.31999999998,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 48.3682382133995,
+      "mean_time_loss": 27.45428287841191,
+      "mean_waiting_time": 14.939950372208436,
+      "seed": 90231,
+      "total_time_loss": 55320.3800000001,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 49.646153846153844,
+      "mean_time_loss": 28.579076923076922,
+      "mean_waiting_time": 16.43076923076923,
+      "seed": 90232,
+      "total_time_loss": 57586.839999999895,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1994,
+      "mean_duration": 51.345409429280394,
+      "mean_time_loss": 31.368223325062036,
+      "mean_waiting_time": 18.29230769230769,
+      "seed": 90233,
+      "total_time_loss": 63206.9699999999,
+      "unfinished": 21
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 49.80744416873449,
+      "mean_time_loss": 29.81893300248139,
+      "mean_waiting_time": 17.068982630272952,
+      "seed": 90234,
+      "total_time_loss": 60085.14999999987,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 50.209925558312655,
+      "mean_time_loss": 30.121851116625308,
+      "mean_waiting_time": 17.260049627791563,
+      "seed": 90235,
+      "total_time_loss": 60695.53000000007,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 52.94441687344913,
+      "mean_time_loss": 33.430794044665014,
+      "mean_waiting_time": 19.260049627791563,
+      "seed": 90236,
+      "total_time_loss": 67363.05,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1994,
+      "mean_duration": 50.38461538461539,
+      "mean_time_loss": 29.717508684863525,
+      "mean_waiting_time": 17.196029776674937,
+      "seed": 90237,
+      "total_time_loss": 59880.77999999999,
+      "unfinished": 21
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 50.76079404466501,
+      "mean_time_loss": 31.019955334987593,
+      "mean_waiting_time": 17.595533498759306,
+      "seed": 90238,
+      "total_time_loss": 62505.21000000014,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 49.6833746898263,
+      "mean_time_loss": 29.689042183622828,
+      "mean_waiting_time": 16.571215880893302,
+      "seed": 90239,
+      "total_time_loss": 59823.41999999996,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 49.27444168734491,
+      "mean_time_loss": 28.556749379652604,
+      "mean_waiting_time": 16.29230769230769,
+      "seed": 90240,
+      "total_time_loss": 57541.849999999875,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1994,
+      "mean_duration": 50.40248138957816,
+      "mean_time_loss": 30.366813895781636,
+      "mean_waiting_time": 17.6575682382134,
+      "seed": 90241,
+      "total_time_loss": 61189.129999999954,
+      "unfinished": 21
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 50.02679900744417,
+      "mean_time_loss": 29.395250620347394,
+      "mean_waiting_time": 17.170719602977666,
+      "seed": 90242,
+      "total_time_loss": 59231.429999999964,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 48.63374689826303,
+      "mean_time_loss": 28.05000992555831,
+      "mean_waiting_time": 15.329032258064515,
+      "seed": 90243,
+      "total_time_loss": 56520.770000000084,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1997,
+      "mean_duration": 48.17667493796526,
+      "mean_time_loss": 26.982937965260547,
+      "mean_waiting_time": 14.93895781637717,
+      "seed": 90244,
+      "total_time_loss": 54370.61999999999,
+      "unfinished": 18
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 48.35831265508685,
+      "mean_time_loss": 27.5707047146402,
+      "mean_waiting_time": 15.411910669975185,
+      "seed": 90245,
+      "total_time_loss": 55554.97000000008,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1995,
+      "mean_duration": 48.184119106699754,
+      "mean_time_loss": 27.569364764267988,
+      "mean_waiting_time": 14.905707196029777,
+      "seed": 90246,
+      "total_time_loss": 55552.270000000055,
+      "unfinished": 20
+    },
+    {
+      "arrived": 1994,
+      "mean_duration": 50.21687344913151,
+      "mean_time_loss": 29.351171215880893,
+      "mean_waiting_time": 16.51315136476427,
+      "seed": 90247,
+      "total_time_loss": 59142.61000000018,
+      "unfinished": 21
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 51.24267990074442,
+      "mean_time_loss": 30.925315136476428,
+      "mean_waiting_time": 17.60545905707196,
+      "seed": 90248,
+      "total_time_loss": 62314.51000000011,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 50.535483870967745,
+      "mean_time_loss": 29.846833746898266,
+      "mean_waiting_time": 16.67196029776675,
+      "seed": 90249,
+      "total_time_loss": 60141.3700000001,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 51.9712158808933,
+      "mean_time_loss": 31.682610421836227,
+      "mean_waiting_time": 18.59602977667494,
+      "seed": 90250,
+      "total_time_loss": 63840.46000000014,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 48.89727047146402,
+      "mean_time_loss": 28.120759305210917,
+      "mean_waiting_time": 15.845657568238213,
+      "seed": 90251,
+      "total_time_loss": 56663.32999999994,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1994,
+      "mean_duration": 50.375186104218365,
+      "mean_time_loss": 30.271786600496277,
+      "mean_waiting_time": 16.925558312655088,
+      "seed": 90252,
+      "total_time_loss": 60997.64999999998,
+      "unfinished": 21
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 50.14987593052109,
+      "mean_time_loss": 29.395821339950373,
+      "mean_waiting_time": 16.599007444168734,
+      "seed": 90253,
+      "total_time_loss": 59232.57999999995,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 50.95732009925558,
+      "mean_time_loss": 30.986193548387096,
+      "mean_waiting_time": 17.41240694789082,
+      "seed": 90254,
+      "total_time_loss": 62437.18000000016,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 50.91712158808933,
+      "mean_time_loss": 29.858908188585605,
+      "mean_waiting_time": 17.554342431761786,
+      "seed": 90255,
+      "total_time_loss": 60165.70000000007,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 50.09181141439206,
+      "mean_time_loss": 29.27567741935484,
+      "mean_waiting_time": 16.440198511166255,
+      "seed": 90256,
+      "total_time_loss": 58990.490000000085,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1996,
+      "mean_duration": 50.80248138957816,
+      "mean_time_loss": 30.086888337468984,
+      "mean_waiting_time": 17.78411910669975,
+      "seed": 90257,
+      "total_time_loss": 60625.07999999993,
+      "unfinished": 19
+    },
+    {
+      "arrived": 1997,
+      "mean_duration": 48.05707196029777,
+      "mean_time_loss": 26.643831265508684,
+      "mean_waiting_time": 14.924069478908189,
+      "seed": 90258,
+      "total_time_loss": 53687.3200000001,
+      "unfinished": 18
+    },
+    {
+      "arrived": 1995,
+      "mean_duration": 50.063523573200996,
+      "mean_time_loss": 29.987870967741934,
+      "mean_waiting_time": 16.93002481389578,
+      "seed": 90259,
+      "total_time_loss": 60425.56000000003,
+      "unfinished": 20
+    },
+    {
+      "arrived": 1988,
+      "mean_duration": 48.32009925558312,
+      "mean_time_loss": 27.20381141439206,
+      "mean_waiting_time": 15.27196029776675,
+      "seed": 90260,
+      "total_time_loss": 54815.679999999855,
+      "unfinished": 27
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 50.748883374689825,
+      "mean_time_loss": 29.866138957816375,
+      "mean_waiting_time": 17.299255583126552,
+      "seed": 90261,
+      "total_time_loss": 60180.26999999997,
+      "unfinished": 25
+    },
+    {
+      "arrived": 2001,
+      "mean_duration": 49.98362282878412,
+      "mean_time_loss": 29.585856079404465,
+      "mean_waiting_time": 16.827295285359803,
+      "seed": 90262,
+      "total_time_loss": 59615.49999999998,
+      "unfinished": 14
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 50.292307692307695,
+      "mean_time_loss": 30.367017369727048,
+      "mean_waiting_time": 16.916625310173696,
+      "seed": 90263,
+      "total_time_loss": 61189.54000000005,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1997,
+      "mean_duration": 49.634739454094294,
+      "mean_time_loss": 28.657414392059554,
+      "mean_waiting_time": 16.24516129032258,
+      "seed": 90264,
+      "total_time_loss": 57744.68999999998,
+      "unfinished": 18
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 49.16923076923077,
+      "mean_time_loss": 28.37702729528536,
+      "mean_waiting_time": 16.09528535980149,
+      "seed": 90265,
+      "total_time_loss": 57179.70999999996,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 49.62034739454094,
+      "mean_time_loss": 28.99072456575682,
+      "mean_waiting_time": 16.191563275434245,
+      "seed": 90266,
+      "total_time_loss": 58416.31,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 48.66401985111663,
+      "mean_time_loss": 28.326952853598012,
+      "mean_waiting_time": 15.80545905707196,
+      "seed": 90267,
+      "total_time_loss": 57078.81000000011,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 49.87593052109181,
+      "mean_time_loss": 29.07297270471464,
+      "mean_waiting_time": 16.102233250620348,
+      "seed": 90268,
+      "total_time_loss": 58582.040000000015,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 48.70620347394541,
+      "mean_time_loss": 27.582277915632755,
+      "mean_waiting_time": 15.762779156327543,
+      "seed": 90269,
+      "total_time_loss": 55578.28999999997,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 47.157320099255585,
+      "mean_time_loss": 25.757310173697274,
+      "mean_waiting_time": 14.006947890818859,
+      "seed": 90270,
+      "total_time_loss": 51900.98000000019,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1995,
+      "mean_duration": 48.6,
+      "mean_time_loss": 28.136719602977667,
+      "mean_waiting_time": 15.110173697270472,
+      "seed": 90271,
+      "total_time_loss": 56695.489999999954,
+      "unfinished": 20
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 50.521588089330024,
+      "mean_time_loss": 30.283275434243176,
+      "mean_waiting_time": 17.21488833746898,
+      "seed": 90272,
+      "total_time_loss": 61020.80000000014,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 49.68883374689826,
+      "mean_time_loss": 29.327598014888338,
+      "mean_waiting_time": 16.87245657568238,
+      "seed": 90273,
+      "total_time_loss": 59095.11000000004,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 49.7136476426799,
+      "mean_time_loss": 28.743761786600498,
+      "mean_waiting_time": 16.859057071960297,
+      "seed": 90274,
+      "total_time_loss": 57918.67999999991,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 50.34789081885856,
+      "mean_time_loss": 29.4436476426799,
+      "mean_waiting_time": 17.327047146401984,
+      "seed": 90275,
+      "total_time_loss": 59328.949999999975,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 50.469478908188584,
+      "mean_time_loss": 29.872426799007446,
+      "mean_waiting_time": 17.659057071960298,
+      "seed": 90276,
+      "total_time_loss": 60192.94000000004,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1994,
+      "mean_duration": 49.11712158808933,
+      "mean_time_loss": 29.10454094292804,
+      "mean_waiting_time": 16.119602977667494,
+      "seed": 90277,
+      "total_time_loss": 58645.64999999998,
+      "unfinished": 21
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 51.19205955334988,
+      "mean_time_loss": 30.97042183622829,
+      "mean_waiting_time": 17.86848635235732,
+      "seed": 90278,
+      "total_time_loss": 62405.399999999885,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 49.9682382133995,
+      "mean_time_loss": 30.243583126550867,
+      "mean_waiting_time": 17.072952853598014,
+      "seed": 90279,
+      "total_time_loss": 60940.81999999999,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 48.50818858560794,
+      "mean_time_loss": 27.971573200992555,
+      "mean_waiting_time": 15.261042183622829,
+      "seed": 90280,
+      "total_time_loss": 56362.71999999984,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 49.949875930521095,
+      "mean_time_loss": 29.175856079404465,
+      "mean_waiting_time": 16.89379652605459,
+      "seed": 90281,
+      "total_time_loss": 58789.35000000001,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1996,
+      "mean_duration": 48.51861042183623,
+      "mean_time_loss": 27.33287344913151,
+      "mean_waiting_time": 15.377667493796526,
+      "seed": 90282,
+      "total_time_loss": 55075.73999999998,
+      "unfinished": 19
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 48.90620347394541,
+      "mean_time_loss": 27.839627791563274,
+      "mean_waiting_time": 15.659057071960298,
+      "seed": 90283,
+      "total_time_loss": 56096.85000000004,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 49.0560794044665,
+      "mean_time_loss": 28.63118610421836,
+      "mean_waiting_time": 15.95682382133995,
+      "seed": 90284,
+      "total_time_loss": 57691.83999999995,
+      "unfinished": 22
+    },
+    {
+      "arrived": 2001,
+      "mean_duration": 50.148883374689824,
+      "mean_time_loss": 30.341553349875934,
+      "mean_waiting_time": 17.00347394540943,
+      "seed": 90285,
+      "total_time_loss": 61138.230000000076,
+      "unfinished": 14
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 50.0258064516129,
+      "mean_time_loss": 29.11108188585608,
+      "mean_waiting_time": 17.074937965260546,
+      "seed": 90286,
+      "total_time_loss": 58658.830000000125,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 50.07642679900744,
+      "mean_time_loss": 29.42582630272953,
+      "mean_waiting_time": 17.15533498759305,
+      "seed": 90287,
+      "total_time_loss": 59293.03999999991,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 50.028287841191066,
+      "mean_time_loss": 29.259697270471463,
+      "mean_waiting_time": 16.41985111662531,
+      "seed": 90288,
+      "total_time_loss": 58958.29000000004,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 48.58709677419355,
+      "mean_time_loss": 27.909027295285362,
+      "mean_waiting_time": 15.426302729528535,
+      "seed": 90289,
+      "total_time_loss": 56236.68999999984,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 51.18660049627792,
+      "mean_time_loss": 30.434059553349876,
+      "mean_waiting_time": 17.986104218362282,
+      "seed": 90290,
+      "total_time_loss": 61324.63000000003,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1995,
+      "mean_duration": 47.090322580645164,
+      "mean_time_loss": 26.40312158808933,
+      "mean_waiting_time": 14.016873449131513,
+      "seed": 90291,
+      "total_time_loss": 53202.290000000066,
+      "unfinished": 20
+    },
+    {
+      "arrived": 2000,
+      "mean_duration": 49.002481389578165,
+      "mean_time_loss": 27.538997518610422,
+      "mean_waiting_time": 15.425806451612903,
+      "seed": 90292,
+      "total_time_loss": 55491.08000000007,
+      "unfinished": 15
+    },
+    {
+      "arrived": 2000,
+      "mean_duration": 49.53449131513648,
+      "mean_time_loss": 29.077935483870966,
+      "mean_waiting_time": 16.784615384615385,
+      "seed": 90293,
+      "total_time_loss": 58592.04000000001,
+      "unfinished": 15
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 51.12307692307692,
+      "mean_time_loss": 31.387449131513648,
+      "mean_waiting_time": 17.51861042183623,
+      "seed": 90294,
+      "total_time_loss": 63245.70999999992,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 50.068982630272956,
+      "mean_time_loss": 29.08440694789082,
+      "mean_waiting_time": 16.529032258064515,
+      "seed": 90295,
+      "total_time_loss": 58605.08000000011,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 49.42084367245658,
+      "mean_time_loss": 29.346372208436726,
+      "mean_waiting_time": 16.58858560794045,
+      "seed": 90296,
+      "total_time_loss": 59132.939999999995,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 49.98908188585608,
+      "mean_time_loss": 30.17483870967742,
+      "mean_waiting_time": 17.148387096774194,
+      "seed": 90297,
+      "total_time_loss": 60802.29999999992,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 49.660049627791565,
+      "mean_time_loss": 28.662263027295285,
+      "mean_waiting_time": 16.480893300248137,
+      "seed": 90298,
+      "total_time_loss": 57754.460000000065,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1995,
+      "mean_duration": 50.32158808933003,
+      "mean_time_loss": 29.6475682382134,
+      "mean_waiting_time": 16.654590570719602,
+      "seed": 90299,
+      "total_time_loss": 59739.85000000012,
+      "unfinished": 20
+    },
+    {
+      "arrived": 1989,
+      "mean_duration": 49.41290322580645,
+      "mean_time_loss": 28.62039205955335,
+      "mean_waiting_time": 15.730521091811415,
+      "seed": 90300,
+      "total_time_loss": 57670.08999999999,
+      "unfinished": 26
+    },
+    {
+      "arrived": 1992,
+      "mean_duration": 50.483374689826306,
+      "mean_time_loss": 29.85398511166253,
+      "mean_waiting_time": 17.260545905707197,
+      "seed": 90301,
+      "total_time_loss": 60155.77999999995,
+      "unfinished": 23
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 51.774689826302726,
+      "mean_time_loss": 31.248377171215882,
+      "mean_waiting_time": 18.379156327543424,
+      "seed": 90302,
+      "total_time_loss": 62965.480000000025,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 48.027791563275436,
+      "mean_time_loss": 27.13282382133995,
+      "mean_waiting_time": 15.476426799007443,
+      "seed": 90303,
+      "total_time_loss": 54672.63999999992,
+      "unfinished": 22
+    },
+    {
+      "arrived": 1987,
+      "mean_duration": 50.11265508684863,
+      "mean_time_loss": 29.604764267990074,
+      "mean_waiting_time": 17.40893300248139,
+      "seed": 90304,
+      "total_time_loss": 59653.600000000006,
+      "unfinished": 28
+    },
+    {
+      "arrived": 1988,
+      "mean_duration": 49.655086848635236,
+      "mean_time_loss": 28.834332506203474,
+      "mean_waiting_time": 16.29330024813896,
+      "seed": 90305,
+      "total_time_loss": 58101.18000000002,
+      "unfinished": 27
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 50.12059553349876,
+      "mean_time_loss": 29.467657568238213,
+      "mean_waiting_time": 16.315136476426797,
+      "seed": 90306,
+      "total_time_loss": 59377.33000000001,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1990,
+      "mean_duration": 49.47196029776675,
+      "mean_time_loss": 29.524094292803973,
+      "mean_waiting_time": 16.84665012406948,
+      "seed": 90307,
+      "total_time_loss": 59491.05000000007,
+      "unfinished": 25
+    },
+    {
+      "arrived": 1991,
+      "mean_duration": 48.00942928039702,
+      "mean_time_loss": 26.59162282878412,
+      "mean_waiting_time": 15.229776674937964,
+      "seed": 90308,
+      "total_time_loss": 53582.12000000003,
+      "unfinished": 24
+    },
+    {
+      "arrived": 1993,
+      "mean_duration": 48.49677419354839,
+      "mean_time_loss": 27.461563275434244,
+      "mean_waiting_time": 15.371712158808933,
+      "seed": 90309,
+      "total_time_loss": 55335.04999999994,
+      "unfinished": 22
+    }
+  ],
+  "total_time_loss": {
+    "mean": 58556.08350000001,
+    "median": 58873.82000000002,
+    "stdev": 2682.1511599081696
+  },
+  "unfinished": {
+    "mean": 22.2,
+    "median": 23.0,
+    "stdev": 2.796101181678127
+  }
+}
