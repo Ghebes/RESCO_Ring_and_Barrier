@@ -1,0 +1,27 @@
+{
+  "map": "cologne1",
+  "types": [
+    "rl_rb80",
+    "rl_phase",
+    "stochastic_rb80",
+    "actuated_rb"
+  ],
+  "seeds": [
+    90210,
+    100210,
+    110210,
+    120210,
+    130210,
+    140210,
+    150210,
+    160210,
+    170210,
+    180210
+  ],
+  "episodes": 1400,
+  "testing": 100,
+  "jobs": 4,
+  "libsumo": "False",
+  "git_commit": "61513b6348d29bcfa10f9aba84f15fa3c6178e04",
+  "started": "2026-11-07T13:57:00.335215"
+}

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<additional>
+    <tlLogic id="cluster_357187_359543" type="NEMA" programID="NEMA-actuated" offset="0">
+        <param key="detector-length" value="40" />
+        <param key="detector-length-leftTurnLane" value="20" />
+        <param key="total-cycle-length" value="120" />
+        <param key="ring1" value="1,2,3,4" />
+        <param key="ring2" value="5,6,7,8" />
+        <param key="barrierPhases" value="2,6" />
+        <param key="barrier2Phases" value="4,8" />
+        <param key="coordinate-mode" value="false" />
+        <param key="minRecall" value="2,6" />
+        <param key="maxRecall" value="" />
+        <param key="fixForceOff" value="false" />
+        <param key="latchingDetectors" value="1,3,5,7" />
+        <param key="show-detectors" value="false" />
+        <param key="whetherOutputState" value="false" />
+        <phase name="1" duration="99" minDur="3" maxDur="12" vehext="1" yellow="3" red="2" state="srrGGsrrrrsrrrrsrrrr" />
+        <phase name="2" duration="99" minDur="5" maxDur="80" vehext="1" yellow="3" red="2" state="srrrrsrrrrGGGggsrrrr" />
+        <phase name="3" duration="99" minDur="3" maxDur="12" vehext="1" yellow="3" red="2" state="srrrrsrrGGsrrrrsrrrr" />
+        <phase name="4" duration="99" minDur="5" maxDur="80" vehext="1" yellow="3" red="2" state="srrrrsrrrrsrrrrGGGgg" />
+        <phase name="5" duration="99" minDur="3" maxDur="12" vehext="1" yellow="3" red="2" state="srrrrsrrrrsrrGGsrrrr" />
+        <phase name="6" duration="99" minDur="5" maxDur="80" vehext="1" yellow="3" red="2" state="GGGggsrrrrsrrrrsrrrr" />
+        <phase name="7" duration="99" minDur="3" maxDur="12" vehext="1" yellow="3" red="2" state="srrrrsrrrrsrrrrsrrGG" />
+        <phase name="8" duration="99" minDur="5" maxDur="80" vehext="1" yellow="3" red="2" state="srrrrGGGggsrrrrsrrrr" />
+    </tlLogic>
+</additional>

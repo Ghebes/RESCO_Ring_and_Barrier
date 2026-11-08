@@ -16,12 +16,16 @@ S..S+99 for every run type (RESCO restarts the seed counter for testing), so all
 controllers see the same evaluation traffic.  Every run type goes through RESCO,
 so traffic generation and metrics are identical.
 
-Jobs are resumable: each finished job writes a marker under <out>/_status/, and
-re-running the script skips finished jobs.
+Output layout (one folder per environment):
+    <out>/<map>/                 RESCO results for that map (one folder + .json per run)
+    <out>/<map>/_logs/<job>.log  console output of each job
+    <out>/<map>/_status/         markers of finished jobs
+
+Jobs are resumable: re-running the script with the same --out skips finished jobs.
 
 Examples:
     python run_experiments.py --dry-run                     # list jobs + time estimate
-    python run_experiments.py --jobs 6                      # everything, 6 in parallel
+    python run_experiments.py                               # everything, 4 in parallel
     python run_experiments.py --maps cologne1 --jobs 6
     python run_experiments.py --types rl_rb80 --seeds 90210 --episodes 5 --testing 2 \\
         --out experiments_smoke                             # quick test
@@ -48,9 +52,10 @@ ALL_MAPS = [
     "grid4x4",
     "saltlake2_400sX200w",
     "saltlake2_stateXuniversity",
-    "arterial4x4",
     "cologne3",
 ]
+# arterial4x4 excluded: oversaturated demand (~1,150 s time loss even under fixed
+# timing) swamps controller differences, and it would be ~60% of total compute.
 RUN_TYPES = ["rl_rb80", "rl_phase", "stochastic_rb80", "actuated_rb"]
 DEFAULT_SEEDS = [90210 + 10000 * i for i in range(10)]
 
@@ -80,7 +85,7 @@ def job_list(maps, types, seeds, episodes, testing):
 def resco_command(job, args):
     common = [
         f"episodes:{args.episodes}", f"testing:{args.testing}", f"seed:{job['seed']}",
-        f"log_dir:{args.out}", f"libsumo:{args.libsumo}", "save_console_log:True",
+        f"log_dir:{args.out}/{job['map']}", f"libsumo:{args.libsumo}", "save_console_log:True",
     ]
     m = f"@{job['map']}"
     if job["type"] == "rl_rb80":
@@ -118,7 +123,18 @@ def log(msg: str) -> None:
         print(f"[{dt.datetime.now():%Y-%m-%d %H:%M:%S}] {msg}", flush=True)
 
 
-def run_job(job, args, status_dir, logs_dir):
+def map_dirs(out: Path, map_name: str):
+    """(map folder, status folder, logs folder) for one environment."""
+    d = out / map_name
+    return d, d / "_status", d / "_logs"
+
+
+def is_done(out: Path, job) -> bool:
+    return (map_dirs(out, job["map"])[1] / f"{job['name']}.done").exists()
+
+
+def run_job(job, args, out):
+    _, status_dir, logs_dir = map_dirs(out, job["map"])
     cmd, cwd = build_command(job, args)
     env = dict(os.environ)
     env["PYTHONPATH"] = str(ROOT) + os.pathsep + env.get("PYTHONPATH", "")
@@ -142,14 +158,15 @@ def run_job(job, args, status_dir, logs_dir):
     return job, rc, took
 
 
-def main(default_maps=None) -> None:
+def main(default_maps=None, default_jobs=4) -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--maps", nargs="+", default=default_maps or ALL_MAPS, choices=ALL_MAPS)
+    ap.add_argument("--maps", nargs="+", default=default_maps or ALL_MAPS, choices=list(SEC_PER_EPISODE))
     ap.add_argument("--types", nargs="+", default=RUN_TYPES, choices=RUN_TYPES)
     ap.add_argument("--seeds", nargs="+", type=int, default=DEFAULT_SEEDS)
     ap.add_argument("--episodes", type=int, default=1400, help="training episodes (RL)")
     ap.add_argument("--testing", type=int, default=100, help="evaluation episodes")
-    ap.add_argument("--jobs", type=int, default=1, help="jobs to run in parallel")
+    ap.add_argument("--jobs", type=int, default=default_jobs,
+                    help=f"jobs to run in parallel (default {default_jobs})")
     ap.add_argument("--python", default=sys.executable, help="Python with torch/pfrl/traci installed")
     ap.add_argument("--libsumo", choices=["auto", "True", "False"], default="auto")
     ap.add_argument("--out", default=f"experiments_{dt.date.today():%Y-%m-%d}",
@@ -161,13 +178,12 @@ def main(default_maps=None) -> None:
         args.libsumo = str(detect_libsumo(args.python))
 
     out = ROOT / args.out
-    status_dir, logs_dir = out / "_status", out / "_logs"
     jobs = job_list(args.maps, args.types, args.seeds, args.episodes, args.testing)
-    pending = [j for j in jobs if not (status_dir / f"{j['name']}.done").exists()]
+    pending = [j for j in jobs if not is_done(out, j)]
 
     total = sum(j["est"] for j in pending)
     print(f"Python : {args.python}  (libsumo: {args.libsumo})")
-    print(f"Output : {out}")
+    print(f"Output : {out}  (one subfolder per map: {', '.join(args.maps)})")
     print(f"Jobs   : {len(jobs)} total, {len(jobs) - len(pending)} already done, {len(pending)} to run")
     print(f"Estimate (rough, assumes each job runs as fast as alone): "
           f"{fmt_hours(total)} sequential, ~{fmt_hours(total / max(1, args.jobs))} with --jobs {args.jobs}")
@@ -178,19 +194,21 @@ def main(default_maps=None) -> None:
             print(f"\n# {j['name']}  (~{fmt_hours(j['est'])})\ncd {cwd} && {' '.join(cmd)}")
         return
 
-    status_dir.mkdir(parents=True, exist_ok=True)
-    logs_dir.mkdir(parents=True, exist_ok=True)
-    (out / "experiment_config.json").write_text(json.dumps({
-        "maps": args.maps, "types": args.types, "seeds": args.seeds, "episodes": args.episodes,
-        "testing": args.testing, "jobs": args.jobs, "libsumo": args.libsumo,
-        "git_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True,
-                                     text=True).stdout.strip(),
-        "started": dt.datetime.now().isoformat(),
-    }, indent=2), encoding="utf-8")
+    commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True,
+                            text=True).stdout.strip()
+    for m in args.maps:
+        map_dir, status_dir, logs_dir = map_dirs(out, m)
+        status_dir.mkdir(parents=True, exist_ok=True)
+        logs_dir.mkdir(parents=True, exist_ok=True)
+        (map_dir / "experiment_config.json").write_text(json.dumps({
+            "map": m, "types": args.types, "seeds": args.seeds, "episodes": args.episodes,
+            "testing": args.testing, "jobs": args.jobs, "libsumo": args.libsumo,
+            "git_commit": commit, "started": dt.datetime.now().isoformat(),
+        }, indent=2), encoding="utf-8")
 
     failures = []
     with ThreadPoolExecutor(max_workers=args.jobs) as pool:
-        futures = [pool.submit(run_job, j, args, status_dir, logs_dir) for j in pending]
+        futures = [pool.submit(run_job, j, args, out) for j in pending]
         for n, fut in enumerate(as_completed(futures), 1):
             job, rc, _ = fut.result()
             if rc != 0:
@@ -198,7 +216,7 @@ def main(default_maps=None) -> None:
             log(f"progress {n}/{len(pending)}")
     print(f"\nFinished. {len(pending) - len(failures)} succeeded, {len(failures)} failed.")
     for name in failures:
-        print(f"  FAILED: {name}  (log: {logs_dir / (name + '.log')})")
+        print(f"  FAILED: {name}  (log: {map_dirs(out, name.split('__')[0])[2] / (name + '.log')})")
     sys.exit(1 if failures else 0)
 
 
