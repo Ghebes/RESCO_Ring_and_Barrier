@@ -158,7 +158,7 @@ def run_job(job, args, out):
     return job, rc, took
 
 
-def main(default_maps=None, default_jobs=4) -> None:
+def main(default_maps=None, default_jobs=4, default_out=None) -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--maps", nargs="+", default=default_maps or ALL_MAPS, choices=list(SEC_PER_EPISODE))
     ap.add_argument("--types", nargs="+", default=RUN_TYPES, choices=RUN_TYPES)
@@ -169,7 +169,7 @@ def main(default_maps=None, default_jobs=4) -> None:
                     help=f"jobs to run in parallel (default {default_jobs})")
     ap.add_argument("--python", default=sys.executable, help="Python with torch/pfrl/traci installed")
     ap.add_argument("--libsumo", choices=["auto", "True", "False"], default="auto")
-    ap.add_argument("--out", default=f"experiments_{dt.date.today():%Y-%m-%d}",
+    ap.add_argument("--out", default=default_out or f"experiments_{dt.date.today():%Y-%m-%d}",
                     help="results folder, relative to the repo root")
     ap.add_argument("--dry-run", action="store_true", help="list jobs and estimate time only")
     args = ap.parse_args()
