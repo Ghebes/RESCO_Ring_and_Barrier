@@ -76,6 +76,7 @@ class MultiSignal(gym.Env):
         self._seed_mode = cfg.training
         self._mode_episode = 0
         self._sumo_seed = cfg.seed
+        self._test_window_started = False
         if "prob_test" in cfg:
             self.context = 0
 
@@ -357,7 +358,12 @@ class MultiSignal(gym.Env):
 
         state_file = cfg.run_path + "state.xml.gz"
         if os.path.exists(state_file):
-            sumo_cmd += ["--load-state", state_file]
+            # The saved state holds SUMO's cumulative travel-time total. On Salt Lake the
+            # clock goes back from 86400 to 0 at midnight, so vehicles that cross midnight
+            # add negative travel times; with a big backlog the total goes negative and
+            # SUMO's schema check refuses to load the file. Skipping the schema check does
+            # not change the simulation (RESCO's metrics come from tripinfo timeLoss).
+            sumo_cmd += ["--load-state", state_file, "--xml-validation", "never"]
         if cfg.load_sim is not None and cfg.load_sim:
             sumo_cmd += ["--load-state", cfg.load_sim]
 
@@ -380,6 +386,15 @@ class MultiSignal(gym.Env):
 
         if cfg.training and cfg.curriculum is not None:
             self.curriculum_next()
+
+        if (
+            "saltlake" in cfg.map
+            and cfg.run_hour is None
+            and "prob_test" not in cfg
+            and not cfg.training
+            and not self._test_window_started
+        ):
+            self.start_saltlake_test_window()
 
         info = {"out_of_data": False, "environment": self}
         # Start a new simulation
@@ -489,20 +504,51 @@ class MultiSignal(gym.Env):
             raise FileNotFoundError(path)
         return path
 
+    def start_saltlake_test_window(self):
+        """Put every controller's Salt Lake evaluation on the same traffic.
+
+        Salt Lake episodes walk through the real 2023 calendar one hour at a time and
+        carry the network state over between hours.  Without this, a trained agent was
+        evaluated on the hours after its training (from hour `episodes` on), starting
+        from whatever backlog training left behind, while controllers with no training
+        were evaluated on hours 0..testing-1 from an empty network.
+
+        Evaluation now always starts where `episodes` training hours would end (the
+        calendar is replayed with RESCO's own hour/missing-data logic, so it matches a
+        training run exactly) and starts from an empty network.  Every controller is
+        therefore evaluated on the same hours, none of which were used for training.
+        """
+        self._test_window_started = True
+        self.date = self.resolve_date()
+        self.hour_of_day = 0
+        for _ in range(int(cfg.episodes)):
+            self.advance_saltlake_hour()
+        for name in ("state.xml.gz", "signals.pkl"):
+            path = cfg.run_path + name
+            if os.path.exists(path):
+                os.remove(path)
+        logger.info(
+            "Salt Lake evaluation window: from %s hour %d, empty network", self.date.date(), self.hour_of_day
+        )
+        print(f"Salt Lake evaluation window: from {self.date.date()} hour {self.hour_of_day}, empty network")
+
     def get_saltlake_data(self):
         cfg.start_time = self.hour_of_day * 3600
         cfg.end_time = cfg.start_time + 3600
-        self.hour_of_day += 1
-        if self.hour_of_day == 24:
-            self.date += datetime.timedelta(days=1)
-            self.hour_of_day = 0
-        self.handle_missing_data()
+        self.advance_saltlake_hour()
         try:
             cfg.route, self.episode_vehicles = generate_flow_from_csv(
                 self.date, self.original_route
             )
         except FileNotFoundError:
             raise RuntimeError("Out of data for saltlake, ending run")
+
+    def advance_saltlake_hour(self):
+        self.hour_of_day += 1
+        if self.hour_of_day == 24:
+            self.date += datetime.timedelta(days=1)
+            self.hour_of_day = 0
+        self.handle_missing_data()
 
     def handle_missing_data(self):
         """

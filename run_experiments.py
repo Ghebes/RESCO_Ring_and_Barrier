@@ -57,13 +57,17 @@ ALL_MAPS = [
 # arterial4x4 excluded: oversaturated demand (~1,150 s time loss even under fixed
 # timing) swamps controller differences, and it would be ~60% of total compute.
 RUN_TYPES = ["rl_rb80", "rl_phase", "stochastic_rb80", "actuated_rb"]
+# Evaluation only: reload the model an rl_rb80 run already trained (same map, same seed,
+# found in <out>/<map>/) and run the 100 evaluation episodes again.  Used for
+# saltlake2_400sX200w, whose first evaluation was invalid (see SALTLAKE_EVALUATION_FIX.md).
+EXTRA_TYPES = ["rl_rb80_eval"]
 DEFAULT_SEEDS = [90210 + 10000 * i for i in range(10)]
 
 # Rough wall-clock seconds per episode for ONE job on an idle machine (TraCI, no
 # libsumo), measured with short runs.  Only used for the --dry-run estimate.
 SEC_PER_EPISODE = {
     "cologne1": 5, "cologne3": 13, "grid4x4": 30, "arterial4x4": 110,
-    "saltlake2_400sX200w": 8, "saltlake2_stateXuniversity": 8,
+    "saltlake2_400sX200w": 17, "saltlake2_stateXuniversity": 17,  # measured on 400sX200w
 }
 
 
@@ -72,7 +76,7 @@ def job_list(maps, types, seeds, episodes, testing):
     for m in maps:
         for t in types:
             for s in seeds:
-                if t in ("actuated_rb", "stochastic_rb80"):
+                if t in ("actuated_rb", "stochastic_rb80", "rl_rb80_eval"):
                     est = testing * SEC_PER_EPISODE[m]
                 else:
                     est = (episodes + testing) * SEC_PER_EPISODE[m]
@@ -97,9 +101,23 @@ def resco_command(job, args):
                  "ring_through_max_green:80", "training:False", "save_model:False"]
     elif job["type"] == "actuated_rb":
         extra = ["@ACTUATED", "action_set:Phase", "training:False", "save_model:False"]
+    elif job["type"] == "rl_rb80_eval":
+        model = find_trained_model(ROOT / args.out / job["map"], job["seed"], "RingAndBarrier")
+        extra = ["@IDQN", "action_set:RingAndBarrier", "ring_max_green:80", "ring_through_max_green:80",
+                 "training:False", "save_model:False", f"load_model:{model}"]
     else:
         raise ValueError(job["type"])
     return [args.python, "main.py", m, extra[0], *extra[1:], *common], RESCO
+
+
+def find_trained_model(map_dir: Path, seed: int, action_set: str) -> str:
+    """uuid folder of the IDQN run that trained (training:True) on this map/seed/action set."""
+    for cfg_path in map_dir.glob("*/git_FINAL/*/config.json"):
+        c = json.loads(cfg_path.read_text(encoding="utf-8"))
+        if (c.get("algorithm") == "IDQN" and c.get("training") is True and c.get("seed") == seed
+                and c.get("action_set") == action_set and any(cfg_path.parent.glob("agt_*.pt"))):
+            return cfg_path.parent.name
+    raise FileNotFoundError(f"No trained IDQN {action_set} model for seed {seed} in {map_dir}")
 
 
 def build_command(job, args):
@@ -158,10 +176,11 @@ def run_job(job, args, out):
     return job, rc, took
 
 
-def main(default_maps=None, default_jobs=4, default_out=None) -> None:
+def main(default_maps=None, default_jobs=4, default_out=None, default_types=None) -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--maps", nargs="+", default=default_maps or ALL_MAPS, choices=list(SEC_PER_EPISODE))
-    ap.add_argument("--types", nargs="+", default=RUN_TYPES, choices=RUN_TYPES)
+    ap.add_argument("--types", nargs="+", default=default_types or RUN_TYPES,
+                    choices=RUN_TYPES + EXTRA_TYPES)
     ap.add_argument("--seeds", nargs="+", type=int, default=DEFAULT_SEEDS)
     ap.add_argument("--episodes", type=int, default=1400, help="training episodes (RL)")
     ap.add_argument("--testing", type=int, default=100, help="evaluation episodes")

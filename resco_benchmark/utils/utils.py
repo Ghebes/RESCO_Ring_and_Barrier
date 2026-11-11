@@ -32,11 +32,14 @@ def permutations_without_rotations(lst):
 
 
 def cleanup_log_dir():
-    # Remove signals.pkl, state.xml.gz, metrics_*.csv, tripinfo_*.xml from log dir and all sub directories
+    # Remove signals.pkl, state.xml.gz, metrics_*.csv, tripinfo_*.xml from THIS run's folder only.
+    # It used to walk all of cfg.log_dir, so a job finishing in parallel deleted the live
+    # state/tripinfo files of every other job writing to the same log_dir (crashing Salt Lake
+    # runs mid-episode and dropping episodes from Cologne1 runs).
     import os
     import re
 
-    for root, dirs, files in os.walk(cfg.log_dir):
+    for root, dirs, files in os.walk(cfg.run_path):
         for file in files:
             if file == "signals.pkl" or file == "state.xml.gz":
                 try:
