@@ -1,0 +1,499 @@
+d82cdd34135db7467162aa61829c67f9e6b043e68612fb447ea637b2cf71693a: saltlake2400sX200w+dqn_ctnSt@RngndBrrr_rngMxGrn@80_rngThrghMxGrn@80_tstng@100_sd@110210_l_cf71693a
+@saltlake2_400sX200w @IDQN action_set:RingAndBarrier ring_max_green:80 ring_through_max_green:80 episodes:1400 testing:100 seed:110210 log_dir:experiments_2026-11-07/saltlake2_400sX200w libsumo:False save_console_log:True
+{
+    "colors_map": {
+        "Max Pressure": "C3",
+        "IDQN": "C0",
+        "Fixed Time": "C1",
+        "MPLight": "C2",
+        "Advanced-MPLight": "C4",
+        "Parameter Reset": "C5"
+    },
+    "names_map": {
+        "timeLoss": "Average Delay",
+        "duration": "Average Travel Time",
+        "waitingTime": "Average Waiting Time",
+        "rewards": "Reward",
+        "max_queues": "Max Queue Length",
+        "queue_lengths": "Average Queue Length",
+        "vehicles": "Demand",
+        "phase_length": "Phase Length",
+        "yaxis_timeLoss": "Delay (s)",
+        "yaxis_duration": "Travel Time (s)",
+        "yaxis_waitingTime": "Waiting Time (s)",
+        "yaxis_rewards": "Reward total",
+        "yaxis_max_queues": "Queue length",
+        "yaxis_queue_lengths": "Queue length",
+        "yaxis_vehicles": "Vehicles (vpm)",
+        "cologne1": "Cologne Single",
+        "cologne3": "Cologne Corridor",
+        "cologne8": "Cologne Region",
+        "ingolstadt1": "Ingolstadt Single",
+        "ingolstadt7": "Ingolstadt Corridor",
+        "ingolstadt21": "Ingolstadt Region",
+        "saltlake2_stateXuniversity": "Univ & State - 2023 Q1",
+        "saltlake2_stateXuniversity#signals@['A3']": "Univ & State - 2023 Q1 - West Signal",
+        "saltlake2_stateXuniversity#signals@['B3']": "Univ & State - 2023 Q1 - East Signal",
+        "saltlake2_400sX200w": "400S & 200W - 2023 Q1",
+        "saltlake2_400sX200w#signals@['A3']": "400S & 200W - 2023 Q1 - West Signal",
+        "saltlake2_400sX200w#signals@['B3']": "400S & 200W - 2023 Q1 - East Signal",
+        "FIXED": "Fixed time",
+        "MAXWAVE": "Max wave",
+        "MAXPRESSURE": "Max pressure",
+        "RLCD": "RL-CD",
+        "AdvancedMPLight": "Advanced-MPLight",
+        "IMultiDQN": "DARTS",
+        "init_time": "H",
+        "sample_time": "W",
+        "model_buffer_size": "n",
+        "deviations": "\u03c3",
+        "fixed_buffer": "Fixed",
+        "parameter_reset_freq": "Reset",
+        "buffer_size": "Buffer",
+        "action_set": "Actions",
+        "fasttrac": "Fast TRAC",
+        "crelu": "CReLU",
+        "global_buffers": "Global",
+        "blank_params": {
+            "IMultiDQN": [
+                "criteria",
+                "expert"
+            ],
+            "ISAC": [
+                "cl_method"
+            ]
+        },
+        "relevant_params": {
+            "IDQN": [
+                "fasttrac",
+                "crelu",
+                "parameter_reset_freq",
+                "buffer_size"
+            ],
+            "RLCD": [
+                "action_set"
+            ],
+            "ISAC": [
+                "cl_method"
+            ],
+            "IMultiDQN": [
+                "criteria",
+                [
+                    "criteria",
+                    "!std&!kstest&!oracle_vehicles",
+                    [
+                        "fallback"
+                    ]
+                ],
+                [
+                    "criteria",
+                    "std",
+                    [
+                        "global_buffers",
+                        "expert",
+                        "init_time",
+                        "sample_time",
+                        "deviations",
+                        "model_buffer_size",
+                        "fixed_buffer"
+                    ]
+                ],
+                [
+                    "criteria",
+                    "kstest",
+                    [
+                        "expert",
+                        "init_time",
+                        "sample_time",
+                        "p_value",
+                        "model_buffer_size",
+                        "fixed_buffer"
+                    ]
+                ]
+            ]
+        },
+        "text_values": {
+            "std": "Std Dev",
+            "kstest": "K-S Test"
+        }
+    },
+    "controlled_signals": null,
+    "uncontrolled_policy": "FIXED",
+    "action_set": "RingAndBarrier",
+    "episodes": 1400,
+    "converged": null,
+    "log_dir": "C:\\Users\\ghebr\\Desktop\\RESCO_Ring_and_Barrier\\experiments_2026-11-07/saltlake2_400sX200w",
+    "gui": false,
+    "libsumo": false,
+    "load_sim": null,
+    "save_model": true,
+    "save_frequency": 20,
+    "load_model": null,
+    "load_replay": true,
+    "training": true,
+    "testing": 100,
+    "flow": 1.0,
+    "curriculum": null,
+    "max_distance": 200,
+    "step_length": 5,
+    "yellow_length": 3,
+    "clearance_length": 2,
+    "ring_max_green": 80,
+    "ring_through_min_green": null,
+    "ring_through_max_green": 80,
+    "ring_state_obs": false,
+    "step_ratio": 1,
+    "run_hour": null,
+    "clean_nightly": null,
+    "log_level": "INFO",
+    "save_console_log": true,
+    "delete_episode_logs": true,
+    "seed": 110210,
+    "gpu": 0,
+    "flat_state": true,
+    "script_launcher": true,
+    "processors": 4,
+    "trials": 5,
+    "optuna_objective": null,
+    "optuna_trials": 1000,
+    "error_bars": true,
+    "smoothing": null,
+    "xml_metrics": [
+        "timeLoss",
+        "duration",
+        "waitingTime"
+    ],
+    "csv_metrics": [
+        "rewards",
+        "max_queues",
+        "queue_lengths",
+        "vehicles",
+        "phase_length"
+    ],
+    "directions": [
+        "S-W",
+        "S-S",
+        "S-E",
+        "W-N",
+        "W-W",
+        "W-S",
+        "N-E",
+        "N-N",
+        "N-W",
+        "E-S",
+        "E-E",
+        "E-N"
+    ],
+    "closures": [
+        {
+            "edge_id": "left3A3",
+            "lane_index": 3,
+            "position": 140
+        },
+        {
+            "edge_id": "top0A3",
+            "lane_index": 4,
+            "position": 70
+        },
+        {
+            "edge_id": "A2A3",
+            "lane_index": 3,
+            "position": 60
+        },
+        {
+            "edge_id": "B3A3",
+            "lane_index": 3,
+            "position": 65
+        },
+        {
+            "edge_id": "A3B3",
+            "lane_index": 3,
+            "position": 65
+        },
+        {
+            "edge_id": "top1B3",
+            "lane_index": 2,
+            "position": 40
+        },
+        {
+            "edge_id": "top1B3",
+            "lane_index": 0,
+            "position": 30
+        },
+        {
+            "edge_id": "C3B3",
+            "lane_index": 3,
+            "position": 85
+        },
+        {
+            "edge_id": "B2B3",
+            "lane_index": 0,
+            "position": 60
+        }
+    ],
+    "pair_to_act_map": null,
+    "phase_pairs": [
+        [
+            "W-W",
+            "W-S"
+        ],
+        [
+            "E-E",
+            "E-N"
+        ],
+        [
+            "W-W",
+            "E-E"
+        ],
+        [
+            "W-S",
+            "E-N"
+        ],
+        [
+            "N-N",
+            "N-W"
+        ],
+        [
+            "S-S",
+            "S-E"
+        ],
+        [
+            "S-S",
+            "N-N"
+        ],
+        [
+            "S-E",
+            "N-W"
+        ]
+    ],
+    "A3": {
+        "lane_sets": {
+            "S-W": [
+                "top0A3_0"
+            ],
+            "S-S": [
+                "top0A3_1",
+                "top0A3_2",
+                "top0A3_3"
+            ],
+            "S-E": [
+                "top0A3_4"
+            ],
+            "W-N": [
+                "B3A3_0"
+            ],
+            "W-W": [
+                "B3A3_0",
+                "B3A3_1",
+                "B3A3_2"
+            ],
+            "W-S": [
+                "B3A3_3"
+            ],
+            "N-E": [
+                "A2A3_0"
+            ],
+            "N-N": [
+                "A2A3_0",
+                "A2A3_1",
+                "A2A3_2"
+            ],
+            "N-W": [
+                "A2A3_3"
+            ],
+            "E-S": [
+                "left3A3_0"
+            ],
+            "E-E": [
+                "left3A3_0",
+                "left3A3_1",
+                "left3A3_2"
+            ],
+            "E-N": [
+                "left3A3_3"
+            ]
+        },
+        "downstream": {
+            "N": null,
+            "E": "B3",
+            "S": null,
+            "W": null
+        },
+        "fixed_timings": [
+            0,
+            0,
+            5,
+            2,
+            3,
+            2,
+            1,
+            0
+        ],
+        "fixed_phase_order_idx": 0
+    },
+    "B3": {
+        "lane_sets": {
+            "S-W": [
+                "top1B3_0"
+            ],
+            "S-S": [
+                "top1B3_1"
+            ],
+            "S-E": [
+                "top1B3_2"
+            ],
+            "W-N": [
+                "C3B3_0"
+            ],
+            "W-W": [
+                "C3B3_0",
+                "C3B3_1",
+                "C3B3_2"
+            ],
+            "W-S": [
+                "C3B3_3"
+            ],
+            "N-E": [
+                "B2B3_0"
+            ],
+            "N-N": [
+                "B2B3_1"
+            ],
+            "N-W": [
+                "B2B3_2"
+            ],
+            "E-S": [
+                "A3B3_0"
+            ],
+            "E-E": [
+                "A3B3_0",
+                "A3B3_1",
+                "A3B3_2"
+            ],
+            "E-N": [
+                "A3B3_3"
+            ]
+        },
+        "downstream": {
+            "N": null,
+            "E": null,
+            "S": null,
+            "W": "A3"
+        },
+        "fixed_timings": [
+            1,
+            0,
+            5,
+            3,
+            0,
+            0,
+            4,
+            0,
+            6
+        ],
+        "fixed_phase_order_idx": 0,
+        "fixed_offset": 6
+    },
+    "management": {
+        "top_mgr": [
+            "A3",
+            "B3"
+        ]
+    },
+    "management_neighbors": {
+        "top_mgr": []
+    },
+    "network": "saltlake2_400sX200w.net.xml",
+    "route": "saltlake2_400sX200w.flo.xml",
+    "start_time": 0,
+    "end_time": 86400,
+    "peak_date": "2023-2-3",
+    "peak_hour": 64800,
+    "start_date": "2023-1-1",
+    "end_date": "2024-1-1",
+    "missing_start": [],
+    "missing_end": [],
+    "module": "action_value.pfrl_dqn",
+    "state": "drq",
+    "reward": "wait",
+    "learning_rate": 0.001,
+    "batch_size": 32,
+    "discount": 0.99,
+    "epsilon_begin": 1.0,
+    "epsilon_end": 0.0,
+    "target_update_steps": 500,
+    "buffer_size": 20000,
+    "buffer_type": "uniform",
+    "epsilon_decay_period": 0.8,
+    "number_of_layers": 3,
+    "number_of_units": 64,
+    "vehicles_detailed": 0,
+    "state_builder": [
+        "lane_aggregate",
+        "direction_aggregate",
+        "arrived",
+        "departed",
+        "phase_timers",
+        "approaching",
+        "queued",
+        "effective_running",
+        "average_wait",
+        "average_delay",
+        "average_speed",
+        "average_acceleration",
+        "average_deceleration",
+        "max_wait",
+        "max_delay",
+        "max_speed",
+        "max_acceleration",
+        "max_deceleration",
+        "min_wait",
+        "min_delay",
+        "min_speed",
+        "min_acceleration",
+        "min_deceleration",
+        "wait",
+        "delay",
+        "speed",
+        "acceleration",
+        "deceleration",
+        "time",
+        "pressure",
+        "downstream_arrived",
+        "downstream_departed",
+        "downstream_phase_timers",
+        "downstream_pressure",
+        "downstream_approaching",
+        "downstream_queued",
+        "downstream_effective_running",
+        "downstream_average_wait",
+        "downstream_average_delay",
+        "downstream_average_speed",
+        "downstream_average_acceleration",
+        "downstream_average_deceleration",
+        "downstream_max_wait",
+        "downstream_max_delay",
+        "downstream_max_speed",
+        "downstream_max_acceleration",
+        "downstream_max_deceleration",
+        "downstream_min_wait",
+        "downstream_min_delay",
+        "downstream_min_speed",
+        "downstream_min_acceleration",
+        "downstream_min_deceleration",
+        "downstream_wait",
+        "downstream_delay",
+        "downstream_speed",
+        "downstream_acceleration",
+        "downstream_deceleration"
+    ],
+    "reward_builder": [
+        "average_wait"
+    ],
+    "reward_aggregation": "sum",
+    "reward_scale": -1,
+    "benchmark_path": "C:\\Users\\ghebr\\Desktop\\RESCO_Ring_and_Barrier",
+    "map": "saltlake2_400sX200w",
+    "algorithm": "IDQN",
+    "uuid": "f692d9ee-4499-4f1d-8b43-b49dc7e6a0c8"
+}

@@ -1,0 +1,27 @@
+{
+  "map": "saltlake2_400sX200w",
+  "types": [
+    "rl_rb80_eval",
+    "rl_phase",
+    "stochastic_rb80",
+    "actuated_rb"
+  ],
+  "seeds": [
+    90210,
+    100210,
+    110210,
+    120210,
+    130210,
+    140210,
+    150210,
+    160210,
+    170210,
+    180210
+  ],
+  "episodes": 1400,
+  "testing": 100,
+  "jobs": 3,
+  "libsumo": "False",
+  "git_commit": "02008eb345accd5fa58171f6e67a138c874d7c54",
+  "started": "2026-11-10T20:54:21.779997"
+}
